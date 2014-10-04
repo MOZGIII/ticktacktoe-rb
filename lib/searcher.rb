@@ -6,7 +6,7 @@ module Searcher
   end
 
   def set_search_mode!(search_mode)
-    raise "Setting search method is ony supported once per runtime!" if @search_mode
+    raise "Setting search method is only supported once per runtime!" if @search_mode
     @search_mode = search_mode
 
     # Do the magic!
