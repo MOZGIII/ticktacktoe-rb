@@ -20,6 +20,8 @@ module App
     when "alphabeta"
       @options.algorithm = AlphaBetaSearch
     end
+
+    check_options!
   end
 
   def options
