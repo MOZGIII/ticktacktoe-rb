@@ -15,8 +15,8 @@ module AlphaBetaSearch
       alias :beta_better_than? :bigger_than_beta?
 
       def assign_alpha(value)
-        alpha ||= value  # if alpha was nil, than it was -inf
-        alpha = [alpha, value].max
+        # puts "Assigning alpha with #{[alpha, value]}"
+        @alpha = [alpha, value].compact.max  # if alpha was nil, than it was -inf
       end
 
 
@@ -27,8 +27,8 @@ module AlphaBetaSearch
       alias :alpha_better_than? :smaller_than_alpha?
 
       def assign_beta(value)
-        beta ||= value  # if beta was nil, than it was +inf
-        beta = [beta, value].min
+        # puts "Assigning beta with #{[beta, value]}"
+        @beta = [beta, value].compact.min  # if beta was nil, than it was +inf
       end
 
       def to_s
@@ -57,11 +57,9 @@ module AlphaBetaSearch
       end
 
       def reset_search!
-        @box = AlphaBetaBox.new
       end
 
       def box
-        @box
       end
     end
 
@@ -70,7 +68,18 @@ module AlphaBetaSearch
     end
 
     def box
-      self.class.box
+      @box || raise
+    end
+
+    def init_root_state!
+      init_box(AlphaBetaBox.new) # init with infinite box
+    end
+
+    def init_box(old_box)
+      raise unless old_box
+      @box = AlphaBetaBox.new
+      @box.alpha, @box.beta = old_box.alpha, old_box.beta
+      @box
     end
 
     def max_value_state!
@@ -84,6 +93,7 @@ module AlphaBetaSearch
         max_child_state ||= child_state
 
         # Resolve values for all child state's successors
+        child_state.init_box(box)
         child_state.min_value_state!
 
         # Update max_child_state if needed
@@ -112,6 +122,7 @@ module AlphaBetaSearch
         min_child_state ||= child_state
 
         # Resolve values for all child state's successors
+        child_state.init_box(box)
         child_state.max_value_state!
 
         # Update min_child_state if needed

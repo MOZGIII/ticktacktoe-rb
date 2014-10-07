@@ -18,6 +18,7 @@ module Searcher
     State.set_playing_as(playing_as)
     action = InitialAction.new(SymbolsManager::other_symbol(playing_as))
     state = State.new(board, action)
+    state.init_root_state! if state.respond_to?(:init_root_state!)
     state.max_value_state!
   end
 end
