@@ -55,12 +55,6 @@ module AlphaBetaSearch
         @max_symbol = symbol
         @min_symbol = SymbolsManager::other_symbol(symbol)
       end
-
-      def reset_search!
-      end
-
-      def box
-      end
     end
 
     def value
@@ -92,8 +86,10 @@ module AlphaBetaSearch
       successors.each do |child_state|
         max_child_state ||= child_state
 
-        # Resolve values for all child state's successors
+        # Init child's alphabeta box
         child_state.init_box(box)
+
+        # Resolve values for all child state's successors
         child_state.min_value_state!
 
         # Update max_child_state if needed
@@ -121,8 +117,10 @@ module AlphaBetaSearch
       successors.each do |child_state|
         min_child_state ||= child_state
 
-        # Resolve values for all child state's successors
+        # Init child's alphabeta box
         child_state.init_box(box)
+
+        # Resolve values for all child state's successors
         child_state.max_value_state!
 
         # Update min_child_state if needed
